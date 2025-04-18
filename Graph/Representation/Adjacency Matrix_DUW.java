@@ -1,4 +1,4 @@
-public class GfG {
+public class Adjacency Matrix_DUW {
 
     // Add edge in a directed manner
     public static void addEdge(int[][] mat, int from, int to) {
