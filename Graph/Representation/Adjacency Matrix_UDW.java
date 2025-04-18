@@ -1,4 +1,4 @@
-public class GfG {
+public class Adjacency Matrix_UDW {
 
     // Modified addEdge to accept weight
     public static void addEdge(int[][] mat, int i, int j, int weight) {
