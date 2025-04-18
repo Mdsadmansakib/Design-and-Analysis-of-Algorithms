@@ -1,3 +1,4 @@
+// Undirected and Unweighted graph
 import java.util.Arrays;
 
 public class GfG {
