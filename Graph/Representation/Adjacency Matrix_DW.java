@@ -1,4 +1,4 @@
-public class GfG {
+public class Adjacency Matrix_DW {
 
     // Add edge with weight in a directed graph
     public static void addEdge(int[][] mat, int from, int to, int weight) {
