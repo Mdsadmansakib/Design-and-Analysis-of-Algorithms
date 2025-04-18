@@ -1,7 +1,7 @@
 // Undirected and Unweighted graph
 import java.util.Arrays;
 
-public class GfG {
+public class Adjacency Matrix_UDUW {
 
     public static void addEdge(int[][] mat, int i, int j) {
         mat[i][j] = 1;
