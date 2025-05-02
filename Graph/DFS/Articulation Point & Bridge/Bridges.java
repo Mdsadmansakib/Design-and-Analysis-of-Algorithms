@@ -1,4 +1,4 @@
-.*
+/*
 
 // Main algorithm to find Bridges in the graph
 Bridges: Pseudocode
