@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class SCCKosaraju {
+public class KosarajuSCC {
     static class Graph {
         int V;
         List<List<Integer>> adj;
