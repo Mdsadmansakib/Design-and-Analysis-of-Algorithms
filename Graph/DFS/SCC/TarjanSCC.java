@@ -1,3 +1,11 @@
+// Single DFS pass using a low-link value system.
+// Maintains a stack to track the current path.
+//When low[u] == disc[u], pop the stack to get the SCC.
+
+// Time Complexity: O(V + E)
+//Space: Stack + arrays for disc, low, onStack.
+
+
 import java.util.*;
 
 public class TarjanSCC {
