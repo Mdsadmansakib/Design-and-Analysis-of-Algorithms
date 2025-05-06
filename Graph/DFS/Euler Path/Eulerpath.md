@@ -34,9 +34,7 @@ Given an **undirected connected graph**:
 
 ---
 
-## 🔢 Algorithm to Check Eulerian Path (Undirected Graph)
-
-### Pseudocode:
+## 🔢 Eulerian Path and Circuit: Java Pseudocode
 
 ```java
 boolean hasEulerianPath(List<Integer>[] adj, int V) {
@@ -45,6 +43,13 @@ boolean hasEulerianPath(List<Integer>[] adj, int V) {
         if (adj[i].size() % 2 != 0)
             odd++;
     }
-    // Eulerian Path exists if 0 or 2 vertices have odd degree
-    return (odd == 0 || odd == 2);
+    return (odd == 0 || odd == 2); // Path: 0 or 2 odd vertices
+}
+
+boolean hasEulerianCircuit(List<Integer>[] adj, int V) {
+    for (int i = 0; i < V; i++) {
+        if (adj[i].size() % 2 != 0)
+            return false;
+    }
+    return true; // Circuit: all even degrees
 }
