@@ -32,6 +32,51 @@ If `low[v] > tin[u]`, then edge `(u, v)` is a **bridge**.
 
 ---
 
+## 🔍 Articulation Point Algorithm (Step-by-Step)
+
+### 🧠 Algorithm Steps:
+
+1. **Build DFS Spanning Tree** starting from any unvisited node.
+2. **Assign Discovery Time `d(v)`** for each vertex during DFS.
+3. **Calculate Lowest Discovery Time `L(v)`** that can be reached from subtree rooted at `v` using back edges.
+4. **Articulation Condition**:
+   - If `u` is parent of `v` in DFS tree and `L(v) ≥ d(u)` → then `u` is an articulation point.
+   - Special Case: If `u` is root and has 2 or more DFS children → `u` is an articulation point.
+
+---
+
+### ✅ Pseudocode / Java-like Logic
+
+```java
+void dfs(int u, int parent) {
+    visited[u] = true;
+    discovery[u] = low[u] = ++time;
+    int children = 0;
+
+    for (int v : adj[u]) {
+        if (v == parent) continue;
+
+        if (!visited[v]) {
+            dfs(v, u);
+            low[u] = min(low[u], low[v]);
+
+            // Step 4 condition
+            if (parent != -1 && low[v] >= discovery[u])
+                articulationPoint[u] = true;
+
+            children++;
+        } else {
+            // Back edge
+            low[u] = min(low[u], discovery[v]);
+        }
+    }
+
+    // Root node special case
+    if (parent == -1 && children > 1)
+        articulationPoint[u] = true;
+}
+
+
 ## 💻 Java Implementation
 
 ### ✅ Articulation Points Code
