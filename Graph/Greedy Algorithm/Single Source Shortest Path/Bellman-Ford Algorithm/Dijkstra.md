@@ -34,11 +34,10 @@ function Dijkstra(graph, V, source):
 
     Print distance[] for all vertices
 
-```text
 
-Java Implementation:
 
-```text
+## ⏱️ Java Implementation
+
 import java.util.*;
 
 public class Dijkstra {
@@ -108,4 +107,4 @@ public class Dijkstra {
     }
 }
 
-```text
+
