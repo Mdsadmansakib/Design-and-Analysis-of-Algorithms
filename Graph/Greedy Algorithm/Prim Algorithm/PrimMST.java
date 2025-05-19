@@ -1,23 +1,23 @@
 import java.util.*;
 
-// Class to represent an edge with a destination vertex and weight
-class Edge implements Comparable<Edge> {
-    int vertex;
-    int weight;
+public class PrimMST {
 
-    Edge(int v, int w) {
-        this.vertex = v;
-        this.weight = w;
+    // Static nested class to represent an edge
+    static class Edge implements Comparable<Edge> {
+        int vertex;
+        int weight;
+
+        Edge(int v, int w) {
+            this.vertex = v;
+            this.weight = w;
+        }
+
+        // For PriorityQueue to compare edges based on weight
+        public int compareTo(Edge other) {
+            return this.weight - other.weight;
+        }
     }
 
-    // For PriorityQueue to compare edges based on weight
-    public int compareTo(Edge other) {
-        return this.weight - other.weight;
-    }
-}
-
-public class PrimMST{
-    
     public static void prims(int V, List<List<Edge>> graph) {
         boolean[] visited = new boolean[V];
         int[] parent = new int[V];
@@ -26,7 +26,6 @@ public class PrimMST{
         Arrays.fill(weight, Integer.MAX_VALUE);
         Arrays.fill(parent, -1);
 
-        // Min-heap based on edge weight
         PriorityQueue<Edge> pq = new PriorityQueue<>();
         weight[0] = 0;
         pq.add(new Edge(0, 0)); // Start from vertex 0
@@ -50,16 +49,18 @@ public class PrimMST{
             }
         }
 
-        // Output the MST
+        int totalCost = 0;
         System.out.println("Edge\tWeight");
         for (int i = 1; i < V; i++) {
             System.out.println(parent[i] + " - " + i + "\t" + weight[i]);
+            totalCost += weight[i];
         }
+        System.out.println("Total minimum cost of MST: " + totalCost);
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        
+
         System.out.print("Enter number of vertices: ");
         int V = sc.nextInt();
         System.out.print("Enter number of edges: ");
