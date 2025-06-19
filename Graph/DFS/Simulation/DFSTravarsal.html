@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complex Graph Analysis Problem</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .problem-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .problem-title {
+            color: #e74c3c;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .graph-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        svg {
+            width: 800px;
+            height: 550px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: white;
+        }
+        
+        .node {
+            fill: #3498db;
+            stroke: #2980b9;
+            stroke-width: 3;
+            transition: all 0.3s ease;
+        }
+        
+        .node:hover {
+            fill: #e74c3c;
+            transform: scale(1.1);
+        }
+        
+        .articulation-point {
+            fill: #e74c3c;
+            stroke: #c0392b;
+            stroke-width: 4;
+        }
+        
+        .bridge {
+            stroke: #f39c12;
+            stroke-width: 5;
+        }
+        
+        .node-label {
+            font-size: 16px;
+            font-weight: bold;
+            fill: white;
+            text-anchor: middle;
+            dominant-baseline: central;
+            pointer-events: none;
+        }
+        
+        .edge {
+            stroke: #7f8c8d;
+            stroke-width: 3;
+            transition: all 0.3s ease;
+        }
+        
+        .back-edge {
+            stroke: #2ecc71;
+            stroke-width: 3;
+            stroke-dasharray: 5,5;
+        }
+        
+        .requirements {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .requirements h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .requirements ol {
+            color: #856404;
+        }
+        
+        .requirements li {
+            margin: 10px 0;
+            padding: 5px;
+        }
+        
+        .solution-template {
+            background: #d1ecf1;
+            border: 2px solid #bee5eb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .solution-template h3 {
+            color: #0c5460;
+            margin-top: 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .complexity-analysis {
+            background: #f8d7da;
+            border: 2px solid #f5c6cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .complexity-analysis h3 {
+            color: #721c24;
+            margin-top: 0;
+        }
+        
+        .algorithm-steps {
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .algorithm-steps h3 {
+            color: #155724;
+            margin-top: 0;
+        }
+        
+        .step {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .hint {
+            background: #e2e3e5;
+            border: 2px solid #d6d8db;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .hint h3 {
+            color: #383d41;
+            margin-top: 0;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .legend-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 3px solid;
+        }
+        
+        .legend-line {
+            width: 30px;
+            height: 5px;
+            border-radius: 2px;
+        }
+        
+        .normal-node {
+            background: #3498db;
+            border-color: #2980b9;
+        }
+        
+        .critical-node {
+            background: #e74c3c;
+            border-color: #c0392b;
+        }
+        
+        .bridge-edge {
+            background: #f39c12;
+        }
+        
+        .normal-edge {
+            background: #7f8c8d;
+        }
+        
+        .back-edge-legend {
+            background: #2ecc71;
+            height: 3px;
+            border-radius: 2px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Advanced Graph Theory Problem</h1>
+        
+        <div class="problem-section">
+            <div class="problem-title">Network Vulnerability Analysis</div>
+            
+            <p><strong>Scenario:</strong> You are a network security analyst tasked with analyzing the vulnerability of a computer network. The network is represented as an undirected graph where nodes represent servers and edges represent direct communication links.</p>
+            
+            <div class="graph-container">
+                <svg id="networkGraph">
+                    <!-- Network graph will be drawn here -->
+                </svg>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-circle normal-node"></div>
+                    <span>Regular Server</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-circle critical-node"></div>
+                    <span>Critical Server (Articulation Point)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-line normal-edge"></div>
+                    <span>Regular Connection</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-line bridge-edge"></div>
+                    <span>Critical Connection (Bridge)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-line back-edge-legend"></div>
+                    <span>Back Edge (DFS)</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="requirements">
+            <h3>📋 Problem Requirements</h3>
+            <p>Given the network topology above, you must perform a comprehensive vulnerability analysis:</p>
+            <ol>
+                <li><strong>DFS Analysis:</strong> Perform DFS traversal starting from node 1 in lexicographic order and compute discovery times, finish times, and low values for all nodes.</li>
+                <li><strong>Critical Point Identification:</strong> Identify all articulation points (critical servers whose failure would disconnect the network).</li>
+                <li><strong>Bridge Detection:</strong> Find all bridges (critical connections whose failure would increase the number of connected components).</li>
+                <li><strong>Strongly Connected Components:</strong> Although this is an undirected graph, identify and analyze the 2-edge-connected components.</li>
+                <li><strong>Network Resilience Score:</strong> Calculate a resilience score based on the formula: 
+                    <br><code>Score = (Total Nodes - Articulation Points) / Total Nodes × (Total Edges - Bridges) / Total Edges × 100</code></li>
+                <li><strong>Attack Simulation:</strong> Determine the minimum number of nodes that need to be compromised to disconnect the network completely.</li>
+                <li><strong>Recovery Planning:</strong> Suggest additional edges that could be added to eliminate all articulation points and bridges.</li>
+            </ol>
+        </div>
+        
+        <div class="algorithm-steps">
+            <h3>🔍 Algorithm Steps</h3>
+            <div class="step">
+                <strong>Step 1:</strong> Implement Tarjan's algorithm for finding articulation points and bridges during DFS traversal.
+            </div>
+            <div class="step">
+                <strong>Step 2:</strong> For each node v, maintain: discovery[v], finish[v], low[v], and parent[v].
+            </div>
+            <div class="step">
+                <strong>Step 3:</strong> A node u is an articulation point if:
+                <ul>
+                    <li>u is root of DFS tree and has more than one child, OR</li>
+                    <li>u is not root and has a child v where low[v] ≥ discovery[u]</li>
+                </ul>
+            </div>
+            <div class="step">
+                <strong>Step 4:</strong> An edge (u,v) is a bridge if low[v] > discovery[u] (where v is a child of u in DFS tree).
+            </div>
+            <div class="step">
+                <strong>Step 5:</strong> Use Union-Find or additional DFS to identify 2-edge-connected components.
+            </div>
+            <div class="step">
+                <strong>Step 6:</strong> Calculate network metrics and generate recommendations.
+            </div>
+        </div>
+        
+        <div class="solution-template">
+            <h3>📊 Solution Template</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Node</th>
+                        <th>Discovery Time</th>
+                        <th>Finish Time</th>
+                        <th>Low Value</th>
+                        <th>Parent</th>
+                        <th>Is Articulation Point?</th>
+                    </tr>
+                </thead>
+                <tbody id="solutionTable">
+                    <tr><td>1</td><td>_</td><td>_</td><td>_</td><td>NIL</td><td>_</td></tr>
+                    <tr><td>2</td><td>_</td><td>_</td><td>_</td><td>_</td><td>_</td></tr>
+                    <tr><td>3</td><td>_</td><td>_</td><td>_</td><td>_</td><td>_</td></tr>
+                    <tr><td>4</td><td>_</td><td>_</td><td>_</td><td>_</td><td>_</td></tr>
+                    <tr><td>5</td><td>_</td><td>_</td><td>_</td><td>_</td><td>_</td></tr>
+                    <tr><td>6</td><td>_</td><td>_</td><td>_</td><td>_</td><td>_</td></tr>
+                    <tr><td>7</td><td>_</td><td>_</td><td>_</td><td>_</td><td>_</td></tr>
+                    <tr><td>8</td><td>_</td><td>_</td><td>_</td><td>_</td><td>_</td></tr>
+                    <tr><td>9</td><td>_</td><td>_</td><td>_</td><td>_</td><td>_</td></tr>
+                    <tr><td>10</td><td>_</td><td>_</td><td>_</td><td>_</td><td>_</td></tr>
+                    <tr><td>11</td><td>_</td><td>_</td><td>_</td><td>_</td><td>_</td></tr>
+                    <tr><td>12</td><td>_</td><td>_</td><td>_</td><td>_</td><td>_</td></tr>
+                    <tr><td>13</td><td>_</td><td>_</td><td>_</td><td>_</td><td>_</td></tr>
+                    <tr><td>14</td><td>_</td><td>_</td><td>_</td><td>_</td><td>_</td></tr>
+                    <tr><td>15</td><td>_</td><td>_</td><td>_</td><td>_</td><td>_</td></tr>
+                </tbody>
+            </table>
+            
+            <p><strong>Bridges Found:</strong> _____________</p>
+            <p><strong>Articulation Points:</strong> _____________</p>
+            <p><strong>2-Edge-Connected Components:</strong> _____________</p>
+            <p><strong>Network Resilience Score:</strong> _____________</p>
+            <p><strong>Minimum Nodes to Disconnect Network:</strong> _____________</p>
+        </div>
+        
+        <div class="complexity-analysis">
+            <h3>⚡ Complexity Analysis</h3>
+            <p><strong>Time Complexity:</strong> O(V + E) where V is the number of vertices and E is the number of edges.</p>
+            <p><strong>Space Complexity:</strong> O(V) for the DFS stack and auxiliary arrays.</p>
+            <p><strong>Why this complexity?</strong> Each vertex and edge is visited exactly once during the DFS traversal, and all additional operations (checking articulation points, bridges) are done in constant time per vertex/edge.</p>
+        </div>
+        
+        <div class="hint">
+            <h3>💡 Hints & Advanced Considerations</h3>
+            <ul>
+                <li><strong>Root Articulation Point:</strong> The root of the DFS tree is an articulation point if and only if it has more than one child in the DFS tree.</li>
+                <li><strong>Bridge vs Back Edge:</strong> An edge (u,v) is a bridge if there's no back edge crossing it. Use low values to detect this.</li>
+                <li><strong>Network Hardening:</strong> To eliminate articulation points, add edges to create alternative paths. To eliminate bridges, ensure every edge is part of a cycle.</li>
+                <li><strong>Real-world Application:</strong> This analysis is crucial for network reliability, finding single points of failure, and planning redundant connections.</li>
+                <li><strong>Extension:</strong> Consider edge weights representing bandwidth or reliability for more realistic network analysis.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Moderate graph with 15 nodes, designed to demonstrate DFS traversal with back edges
+        const graph = {
+            1: [2, 3, 4],           // Central hub
+            2: [1, 3, 5],            // Connected to central hub with cycle
+            3: [1, 2, 4, 6],        // Forms triangle with 1 and 2
+            4: [1, 3, 7],           // Bridge to outer component
+            5: [2, 6, 8],           // Part of first branch
+            6: [3, 5, 9],           // Creates cycle with back edge to 3
+            7: [4, 10, 11],         // Articulation point to outer nodes
+            8: [5, 9, 12],          // Outer branch
+            9: [6, 8, 13],          // Creates back edge opportunity
+            10: [7, 11],            // Small cycle
+            11: [7, 10, 14],        // Leads to leaf node
+            12: [8, 13],            // Bridge to final node
+            13: [9, 12, 15],        // Final articulation point
+            14: [11],               // Leaf node
+            15: [13]                // Final leaf node
+        };
+
+        // Back edges that would appear during DFS traversal (for visualization)
+        const backEdges = [
+            [6, 3],  // Back edge in the first component
+            [9, 6],  // Back edge in the second branch
+            [13, 9]  // Back edge in the final branch
+        ];
+
+        // Node positions for visualization (organized to show DFS structure)
+        const nodePositions = {
+            // Central cluster
+            1: {x: 400, y: 200},   // Root node
+            2: {x: 300, y: 100},    // Left branch
+            3: {x: 500, y: 100},    // Right branch
+            4: {x: 400, y: 300},    // Down from root
+            
+            // Left branch expansion
+            5: {x: 250, y: 150},    
+            6: {x: 350, y: 150},    
+            8: {x: 200, y: 200},   
+            9: {x: 300, y: 200},    
+            12: {x: 150, y: 250},   
+            13: {x: 250, y: 250},   
+            15: {x: 200, y: 300},   
+            
+            // Right branch expansion
+            7: {x: 500, y: 250},    
+            10: {x: 450, y: 300},   
+            11: {x: 550, y: 300},   
+            14: {x: 600, y: 350}    
+        };
+
+        // Identify articulation points and bridges for the graph
+        const articulationPoints = [1, 4, 7, 13]; // Critical nodes
+        const bridges = [[4, 7], [7, 11], [12, 13], [13, 15]]; // Critical connections
+
+        function drawNetworkGraph() {
+            const svg = document.getElementById('networkGraph');
+            svg.innerHTML = '';
+
+            // Draw edges first (tree edges)
+            const drawnEdges = new Set();
+            for (let node in graph) {
+                for (let neighbor of graph[node]) {
+                    const edgeKey = `${Math.min(node, neighbor)}-${Math.max(node, neighbor)}`;
+                    if (!drawnEdges.has(edgeKey)) {
+                        drawnEdges.add(edgeKey);
+                        
+                        const isBridge = bridges.some(([a, b]) => 
+                            (a == node && b == neighbor) || (a == neighbor && b == node)
+                        );
+                        
+                        const isBackEdge = backEdges.some(([a, b]) => 
+                            (a == node && b == neighbor) || (a == neighbor && b == node)
+                        );
+                        
+                        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        line.setAttribute('x1', nodePositions[node].x);
+                        line.setAttribute('y1', nodePositions[node].y);
+                        line.setAttribute('x2', nodePositions[neighbor].x);
+                        line.setAttribute('y2', nodePositions[neighbor].y);
+                        
+                        if (isBackEdge) {
+                            line.setAttribute('class', 'edge back-edge');
+                        } else {
+                            line.setAttribute('class', isBridge ? 'edge bridge' : 'edge');
+                        }
+                        
+                        svg.appendChild(line);
+                    }
+                }
+            }
+
+            // Draw nodes
+            for (let node in nodePositions) {
+                const isArticulationPoint = articulationPoints.includes(parseInt(node));
+                
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', nodePositions[node].x);
+                circle.setAttribute('cy', nodePositions[node].y);
+                circle.setAttribute('r', 20);
+                circle.setAttribute('class', isArticulationPoint ? 'node articulation-point' : 'node');
+                svg.appendChild(circle);
+
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', nodePositions[node].x);
+                text.setAttribute('y', nodePositions[node].y);
+                text.setAttribute('class', 'node-label');
+                text.textContent = node;
+                svg.appendChild(text);
+            }
+        }
+
+        // Initialize the network graph
+        drawNetworkGraph();
+    </script>
+</body>
+</html>
