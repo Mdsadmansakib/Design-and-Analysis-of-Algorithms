@@ -1,6 +1,9 @@
 1.
 ![mst1](mst1.png)
 
+solve
+![mst1solve](mst1solve.png)
+
 
 2.
 ![mst2](mst2.png)
