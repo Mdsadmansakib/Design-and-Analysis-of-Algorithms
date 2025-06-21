@@ -6,7 +6,7 @@
 ![mst2](mst2.png)
 
 Solve: 
-![mst2solve](mst2 solve.png)
+![mst2 solve](mst2 solve.png)
 
 
 4.
