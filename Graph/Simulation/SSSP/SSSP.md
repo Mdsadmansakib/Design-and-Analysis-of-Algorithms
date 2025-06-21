@@ -5,18 +5,18 @@
 
 | Problem | Solution |
 |---------|----------|
-| ![sssp1](sssp1.png) | Comming Soon |
+| ![sssp1](sssp1.png) | ![sssp1solve](sssp1solve.png) |
 
 ## Problem 2 
 
 | Problem | Solution |
 |---------|----------|
-| Comming Soon | Comming Soon|
+| ![sssp2](sssp2.png) | ![sssp2solve](sssp2solve.png) |
 
 ## Problem 3
 
-| Problem & Solution |
+| Problem | Solution |
 |--------------------|
-|Comming Soon|
+| ![sssp3](sssp3.png) | ![sssp3solve](sssp3solve.png) |
 
 ---
