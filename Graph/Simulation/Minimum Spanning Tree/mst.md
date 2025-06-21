@@ -14,14 +14,9 @@
 
 ## Problem 3
 
-| Problem | Solution |
-|---------|----------|
-| ![mst3](mst3.png) | *(Solution coming soon)* |
+| Problem & Solution |
+|--------------------|
+| ![mst3](mst3.png) |
 
 ---
 
-### Key:
-- **Blue nodes**: Graph vertices
-- **Black lines**: Possible edges with weights
-- **Red lines**: Edges selected in MST
-- **Dotted lines**: Rejected edges
