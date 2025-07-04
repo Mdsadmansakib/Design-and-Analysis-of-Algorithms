@@ -26,3 +26,21 @@ Java : https://www.youtube.com/watch?v=XjwTPNKs6Tc&list=PLV3rqOvr9vgkmELwlSouvJt
 Bangla Programming Resources: 
 https://github.com/me-shaon/bangla-programming-resources
 https://sites.google.com/site/smilitude/
+
+
+
+Dynamic Programming:
+
+https://hn026.github.io/posts/200DPPROB/
+
+https://easyhard.github.io/dpv/
+https://algorithm-visualizer.org/
+https://visualgo.net/en
+https://dynamic-programming.debkbanerji.com/select-problem
+
+UVA https://onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=114
+
+Codechef: https://www.codechef.com/practice/dynamic-programming
+
+Leetcode: https://leetcode.com/problem-list/dynamic-programming/
+
