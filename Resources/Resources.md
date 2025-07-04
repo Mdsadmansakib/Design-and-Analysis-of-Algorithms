@@ -31,16 +31,29 @@ https://sites.google.com/site/smilitude/
 
 ## Dynamic Programming:
 
-https://hn026.github.io/posts/200DPPROB/
-
+Visualizations: 
 https://easyhard.github.io/dpv/
 https://algorithm-visualizer.org/
 https://visualgo.net/en
 https://dynamic-programming.debkbanerji.com/select-problem
+
+Topcoder: https://www.topcoder.com/thrive/articles/Dynamic%20Programming:%20From%20Novice%20to%20Advanced
+
+https://people.computing.clemson.edu/~bcdean/dp_practice/
+
+https://cp-algorithms.com/dynamic_programming/intro-to-dp.html
+
+LightOJ:
+https://lightoj.com/problems/category/dp 
+https://github.com/lightoj-dev/problem-tutorials/tree/main
 
 UVA https://onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=114
 
 Codechef: https://www.codechef.com/practice/dynamic-programming
 
 Leetcode: https://leetcode.com/problem-list/dynamic-programming/
+
+https://codeforces.com/blog/entry/67679
+
+200+dp problems: https://hn026.github.io/posts/200DPPROB/
 
