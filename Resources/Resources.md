@@ -29,7 +29,7 @@ https://sites.google.com/site/smilitude/
 
 
 
-Dynamic Programming:
+# Dynamic Programming:
 
 https://hn026.github.io/posts/200DPPROB/
 
