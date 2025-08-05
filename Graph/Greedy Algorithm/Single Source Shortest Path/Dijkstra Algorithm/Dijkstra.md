@@ -33,3 +33,8 @@ function Dijkstra(graph, V, source):
                 add (distance[v], v) to the queue
 
     Print distance[] for all vertices
+```
+
+## Visual:
+![Dijkstra](https://github.com/Mdsadmansakib/Design-and-Analysis-of-Algorithms/blob/main/Graph/Greedy%20Algorithm/Single%20Source%20Shortest%20Path/Dijkstra%20Algorithm/Dijkstra_Animation.gif?raw=true)
+
