@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithm Simulations</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #4a4a4a;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+        }
+        
+        .simulation-section {
+            margin: 40px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid #007bff;
+        }
+        
+        .simulation-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .controls {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        input, select {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        
+        .visualization {
+            min-height: 300px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            background: white;
+            position: relative;
+            overflow: auto;
+        }
+        
+        .array-container {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            align-items: end;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .array-element {
+            background: linear-gradient(145deg, #e3f2fd, #bbdefb);
+            border: 2px solid #2196f3;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 40px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .array-element.highlight {
+            background: linear-gradient(145deg, #ffecb3, #ffc107);
+            border-color: #ff9800;
+            transform: scale(1.1);
+        }
+        
+        .array-element.selected {
+            background: linear-gradient(145deg, #c8e6c9, #4caf50);
+            border-color: #2e7d32;
+        }
+        
+        .array-element.pivot {
+            background: linear-gradient(145deg, #ffcdd2, #f44336);
+            border-color: #c62828;
+        }
+        
+        .step-info {
+            background: #e8f4fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .result-box {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        
+        .error-box {
+            background: #ffebee;
+            border: 2px solid #f44336;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #d32f2f;
+        }
+        
+        .dp-table {
+            display: grid;
+            gap: 2px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        
+        .dp-cell {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            background: #f9f9f9;
+            min-width: 40px;
+        }
+        
+        .dp-cell.header {
+            background: #2196f3;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .dp-cell.current {
+            background: #ffcdd2;
+            animation: flash 0.5s;
+        }
+        
+        @keyframes flash {
+            0% { background: #ffcdd2; }
+            50% { background: #f44336; color: white; }
+            100% { background: #ffcdd2; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Algorithm Simulations</h1>
+        
+        <!-- Quickselect Simulation -->
+        <div class="simulation-section">
+            <div class="simulation-title">📊 Quickselect - Find Kth Smallest Element</div>
+            <div class="controls">
+                <label>Array: </label>
+                <input type="text" id="quickselectArray" value="10,12,3,6,17,2,9,11,20,25,71,4" placeholder="Enter comma-separated numbers">
+                <label>Find: </label>
+                <select id="kValue">
+                    <option value="1">1st smallest</option>
+                    <option value="2">2nd smallest</option>
+                    <option value="3" selected>3rd smallest</option>
+                    <option value="4">4th smallest</option>
+                    <option value="5">5th smallest</option>
+                </select>
+                <button onclick="startQuickselect()">Start Quickselect</button>
+                <button onclick="nextQuickselectStep()" id="nextQuickselectBtn" disabled>Next Step</button>
+                <button onclick="resetQuickselect()">Reset</button>
+            </div>
+            <div class="visualization" id="quickselectViz">
+                <div class="step-info">Enter an array and select which smallest element to find, then click "Start Quickselect"</div>
+            </div>
+        </div>
+
+        <!-- Knapsack Problem Simulation -->
+        <div class="simulation-section">
+            <div class="simulation-title">🎒 0/1 Knapsack Problem - Buffet Selection</div>
+            <div class="controls">
+                <label>Capacity: </label>
+                <input type="number" id="capacity" value="8" min="1" max="20">
+                <button onclick="solveKnapsack()">Solve Knapsack</button>
+                <button onclick="resetKnapsack()">Reset</button>
+            </div>
+            <div class="visualization" id="knapsackViz">
+                <div class="step-info">
+                    <h4>Buffet Items:</h4>
+                    <p>Thai Soup: 2L volume, 3 pleasure</p>
+                    <p>Chicken Curry: 3L volume, 4 pleasure</p>
+                    <p>Mutton Roast: 4L volume, 5 pleasure</p>
+                    <p>Polao: 5L volume, 6 pleasure</p>
+                    <p>Sweet: 2L volume, 5 pleasure</p>
+                    <br>
+                    <p>Click "Solve Knapsack" to find the optimal selection!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Longest Increasing Subsequence -->
+        <div class="simulation-section">
+            <div class="simulation-title">📈 Longest Increasing Subsequence (LIS)</div>
+            <div class="controls">
+                <label>Array: </label>
+                <input type="text" id="lisArray" value="2,1,10,9,15,12,16,13" placeholder="Enter comma-separated numbers">
+                <button onclick="solveLIS()">Find LIS</button>
+                <button onclick="nextLISStep()" id="nextLISBtn" disabled>Next Step</button>
+                <button onclick="resetLIS()">Reset</button>
+            </div>
+            <div class="visualization" id="lisViz">
+                <div class="step-info">Enter an array and click "Find LIS" to see the dynamic programming solution</div>
+            </div>
+        </div>
+
+        <!-- Binary Search Simulation -->
+        <div class="simulation-section">
+            <div class="simulation-title">🔍 Binary Search</div>
+            <div class="controls">
+                <label>Sorted Array: </label>
+                <input type="text" id="binaryArray" value="1,3,5,7,9,11,13,15,17,19" placeholder="Enter comma-separated sorted numbers">
+                <label>Target: </label>
+                <input type="number" id="target" value="7">
+                <button onclick="startBinarySearch()">Start Search</button>
+                <button onclick="nextBinaryStep()" id="nextBinaryBtn" disabled>Next Step</button>
+                <button onclick="resetBinary()">Reset</button>
+            </div>
+            <div class="visualization" id="binaryViz">
+                <div class="step-info">Enter a sorted array and target value, then click "Start Search"</div>
+            </div>
+        </div>
+
+        <!-- MST Kruskal's Algorithm -->
+        <div class="simulation-section">
+            <div class="simulation-title">🌳 Minimum Spanning Tree - Kruskal's Algorithm</div>
+            <div class="controls">
+                <button onclick="startKruskal()">Find MST</button>
+                <button onclick="nextKruskalStep()" id="nextKruskalBtn" disabled>Next Step</button>
+                <button onclick="resetKruskal()">Reset</button>
+            </div>
+            <div class="visualization" id="kruskalViz">
+                <div class="step-info">Click "Find MST" to see Kruskal's algorithm in action on the given graph</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables for simulations
+        let quickselectState = null;
+        let knapsackState = null;
+        let lisState = null;
+        let binaryState = null;
+        let kruskalState = null;
+
+        // Helper function for ordinal suffixes
+        function getOrdinalSuffix(num) {
+            const suffixes = ['th', 'st', 'nd', 'rd'];
+            const v = num % 100;
+            return suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0];
+        }
+
+        // Quickselect Algorithm Implementation
+        function startQuickselect() {
+            const arrayInput = document.getElementById('quickselectArray').value;
+            const k = parseInt(document.getElementById('kValue').value);
+            
+            try {
+                const array = arrayInput.split(',').map(x => parseInt(x.trim()));
+                if (array.some(isNaN)) throw new Error("Invalid numbers in array");
+                if (k > array.length) throw new Error("k is larger than array size");
+                
+                quickselectState = {
+                    originalArray: [...array],
+                    k: k,
+                    steps: [],
+                    currentStep: 0
+                };
+                
+                generateQuickselectSteps(array, 0, array.length - 1, k - 1);
+                displayQuickselectStep();
+                
+                document.getElementById('nextQuickselectBtn').disabled = false;
+            } catch (error) {
+                document.getElementById('quickselectViz').innerHTML = 
+                    `<div class="error-box">Error: ${error.message}</div>`;
+            }
+        }
+
+        function generateQuickselectSteps(arr, left, right, targetIndex) {
+            const state = quickselectState;
+            
+            if (left === right) {
+                state.steps.push({
+                    array: [...arr],
+                    left: left,
+                    right: right,
+                    pivot: left,
+                    targetIndex: targetIndex,
+                    message: `Found ${state.k}${getOrdinalSuffix(state.k)} smallest: ${arr[left]}`,
+                    found: true
+                });
+                return;
+            }
+            
+            // Choose last element as pivot
+            const pivotIndex = right;
+            const pivotValue = arr[pivotIndex];
+            
+            state.steps.push({
+                array: [...arr],
+                left: left,
+                right: right,
+                pivot: pivotIndex,
+                targetIndex: targetIndex,
+                message: `Partition around pivot ${pivotValue} (position ${pivotIndex})`,
+                found: false
+            });
+            
+            // Partition
+            let i = left;
+            for (let j = left; j < right; j++) {
+                if (arr[j] <= pivotValue) {
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                    i++;
+                }
+            }
+            [arr[i], arr[pivotIndex]] = [arr[pivotIndex], arr[i]];
+            const finalPivotPos = i;
+            
+            state.steps.push({
+                array: [...arr],
+                left: left,
+                right: right,
+                pivot: finalPivotPos,
+                targetIndex: targetIndex,
+                message: `Pivot ${pivotValue} placed at position ${finalPivotPos}`,
+                found: false
+            });
+            
+            if (finalPivotPos === targetIndex) {
+                state.steps.push({
+                    array: [...arr],
+                    left: left,
+                    right: right,
+                    pivot: finalPivotPos,
+                    targetIndex: targetIndex,
+                    message: `Found ${state.k}${getOrdinalSuffix(state.k)} smallest: ${arr[finalPivotPos]}`,
+                    found: true
+                });
+            } else if (finalPivotPos > targetIndex) {
+                state.steps.push({
+                    array: [...arr],
+                    left: left,
+                    right: finalPivotPos - 1,
+                    pivot: -1,
+                    targetIndex: targetIndex,
+                    message: `Target in left subarray, searching [${left}, ${finalPivotPos - 1}]`,
+                    found: false
+                });
+                generateQuickselectSteps(arr, left, finalPivotPos - 1, targetIndex);
+            } else {
+                state.steps.push({
+                    array: [...arr],
+                    left: finalPivotPos + 1,
+                    right: right,
+                    pivot: -1,
+                    targetIndex: targetIndex,
+                    message: `Target in right subarray, searching [${finalPivotPos + 1}, ${right}]`,
+                    found: false
+                });
+                generateQuickselectSteps(arr, finalPivotPos + 1, right, targetIndex);
+            }
+        }
+
+        function displayQuickselectStep() {
+            const state = quickselectState;
+            if (!state || state.currentStep >= state.steps.length) return;
+            
+            const step = state.steps[state.currentStep];
+            
+            let html = `
+                <div class="step-info">
+                    <strong>Step ${state.currentStep + 1}:</strong> ${step.message}
+                </div>
+                <div class="array-container">
+            `;
+            
+            step.array.forEach((val, idx) => {
+                let className = 'array-element';
+                if (idx === step.pivot) className += ' pivot';
+                else if (idx === step.targetIndex) className += ' selected';
+                else if (idx >= step.left && idx <= step.right) className += ' highlight';
+                
+                html += `<div class="${className}">${val}</div>`;
+            });
+            
+            html += `</div>`;
+            
+            if (step.found) {
+                html += `<div class="result-box">
+                    The ${state.k}${getOrdinalSuffix(state.k)} smallest element is: ${step.array[step.targetIndex]}
+                </div>`;
+            }
+            
+            document.getElementById('quickselectViz').innerHTML = html;
+        }
+
+        function nextQuickselectStep() {
+            if (quickselectState && quickselectState.currentStep < quickselectState.steps.length - 1) {
+                quickselectState.currentStep++;
+                displayQuickselectStep();
+                
+                if (quickselectState.currentStep === quickselectState.steps.length - 1) {
+                    document.getElementById('nextQuickselectBtn').disabled = true;
+                }
+            }
+        }
+
+        function resetQuickselect() {
+            quickselectState = null;
+            document.getElementById('nextQuickselectBtn').disabled = true;
+            document.getElementById('quickselectViz').innerHTML = 
+                `<div class="step-info">Enter an array and select which smallest element to find, then click "Start Quickselect"</div>`;
+        }
+
+        // Knapsack Problem Implementation
+        function solveKnapsack() {
+            const capacity = parseInt(document.getElementById('capacity').value);
+            
+            const items = [
+                { name: 'Thai Soup', volume: 2, pleasure: 3 },
+                { name: 'Chicken Curry', volume: 3, pleasure: 4 },
+                { name: 'Mutton Roast', volume: 4, pleasure: 5 },
+                { name: 'Polao', volume: 5, pleasure: 6 },
+                { name: 'Sweet', volume: 2, pleasure: 5 }
+            ];
+            
+            const n = items.length;
+            const dp = Array(n + 1).fill().map(() => Array(capacity + 1).fill(0));
+            
+            // Fill DP table
+            for (let i = 1; i <= n; i++) {
+                for (let w = 0; w <= capacity; w++) {
+                    if (items[i-1].volume <= w) {
+                        dp[i][w] = Math.max(
+                            dp[i-1][w],
+                            dp[i-1][w - items[i-1].volume] + items[i-1].pleasure
+                        );
+                    } else {
+                        dp[i][w] = dp[i-1][w];
+                    }
+                }
+            }
+            
+            // Backtrack to find selected items
+            const selected = [];
+            let w = capacity;
+            for (let i = n; i > 0 && dp[i][w] > 0; i--) {
+                if (dp[i][w] !== dp[i-1][w]) {
+                    selected.push(items[i-1]);
+                    w -= items[i-1].volume;
+                }
+            }
+            
+            displayKnapsackResult(dp, items, selected, capacity);
+        }
+
+        function displayKnapsackResult(dp, items, selected, capacity) {
+            const n = items.length;
+            let html = `
+                <h4>Dynamic Programming Table:</h4>
+                <div class="dp-table" style="grid-template-columns: repeat(${capacity + 2}, 1fr);">
+                    <div class="dp-cell header">Item/Cap</div>
+            `;
+            
+            for (let w = 0; w <= capacity; w++) {
+                html += `<div class="dp-cell header">${w}</div>`;
+            }
+            
+            for (let i = 0; i <= n; i++) {
+                html += `<div class="dp-cell header">${i === 0 ? '∅' : items[i-1].name}</div>`;
+                for (let w = 0; w <= capacity; w++) {
+                    html += `<div class="dp-cell">${dp[i][w]}</div>`;
+                }
+            }
+            
+            html += `</div>`;
+            
+            html += `<div class="result-box">
+                <h4>Optimal Selection:</h4>
+                <ul>`;
+            
+            let totalVolume = 0, totalPleasure = 0;
+            selected.forEach(item => {
+                html += `<li>${item.name}: ${item.volume}L, ${item.pleasure} pleasure</li>`;
+                totalVolume += item.volume;
+                totalPleasure += item.pleasure;
+            });
+            
+            html += `</ul>
+                <p><strong>Total Volume: ${totalVolume}L / ${capacity}L</strong></p>
+                <p><strong>Total Pleasure: ${totalPleasure}</strong></p>
+            </div>`;
+            
+            document.getElementById('knapsackViz').innerHTML = html;
+        }
+
+        function resetKnapsack() {
+            document.getElementById('knapsackViz').innerHTML = `
+                <div class="step-info">
+                    <h4>Buffet Items:</h4>
+                    <p>Thai Soup: 2L volume, 3 pleasure</p>
+                    <p>Chicken Curry: 3L volume, 4 pleasure</p>
+                    <p>Mutton Roast: 4L volume, 5 pleasure</p>
+                    <p>Polao: 5L volume, 6 pleasure</p>
+                    <p>Sweet: 2L volume, 5 pleasure</p>
+                    <br>
+                    <p>Click "Solve Knapsack" to find the optimal selection!</p>
+                </div>
+            `;
+        }
+
+        // LIS Implementation
+        function solveLIS() {
+            const arrayInput = document.getElementById('lisArray').value;
+            
+            try {
+                const array = arrayInput.split(',').map(x => parseInt(x.trim()));
+                if (array.some(isNaN)) throw new Error("Invalid numbers in array");
+                
+                lisState = {
+                    array: array,
+                    n: array.length,
+                    dp: Array(array.length).fill(1),
+                    steps: [],
+                    currentStep: 0
+                };
+                
+                generateLISSteps();
+                displayLISStep();
+                
+                document.getElementById('nextLISBtn').disabled = false;
+            } catch (error) {
+                document.getElementById('lisViz').innerHTML = 
+                    `<div class="error-box">Error: ${error.message}</div>`;
+            }
+        }
+
+        function generateLISSteps() {
+            const state = lisState;
+            const array = state.array;
+            const n = state.n;
+            const dp = state.dp;
+            
+            state.steps.push({
+                i: -1,
+                j: -1,
+                dp: [...dp],
+                message: "Initialize: Each element forms a subsequence of length 1"
+            });
+            
+            for (let i = 1; i < n; i++) {
+                for (let j = 0; j < i; j++) {
+                    if (array[j] < array[i]) {
+                        if (dp[j] + 1 > dp[i]) {
+                            dp[i] = dp[j] + 1;
+                            state.steps.push({
+                                i: i,
+                                j: j,
+                                dp: [...dp],
+                                message: `dp[${i}] = max(dp[${i}], dp[${j}] + 1) = ${dp[i]} (${array[j]} < ${array[i]})`
+                            });
+                        }
+                    }
+                }
+            }
+            
+            const maxLength = Math.max(...dp);
+            const lisArray = [];
+            let maxIndex = dp.indexOf(maxLength);
+            
+            // Reconstruct LIS
+            let current = array[maxIndex];
+            let currentLength = maxLength;
+            lisArray.unshift(current);
+            
+            for (let i = maxIndex - 1; i >= 0; i--) {
+                if (dp[i] === currentLength - 1 && array[i] < current) {
+                    lisArray.unshift(array[i]);
+                    current = array[i];
+                    currentLength--;
+                }
+            }
+            
+            state.steps.push({
+                i: -1,
+                j: -1,
+                dp: [...dp],
+                message: `Final result: LIS length = ${maxLength}, LIS = [${lisArray.join(', ')}]`,
+                final: true,
+                lis: lisArray
+            });
+        }
+
+        function displayLISStep() {
+            const state = lisState;
+            if (!state || state.currentStep >= state.steps.length) return;
+            
+            const step = state.steps[state.currentStep];
+            
+            let html = `
+                <div class="step-info">
+                    <strong>Step ${state.currentStep + 1}:</strong> ${step.message}
+                </div>
+                <div class="array-container">
+            `;
+            
+            state.array.forEach((val, idx) => {
+                let className = 'array-element';
+                if (idx === step.i) className += ' selected';
+                else if (idx === step.j) className += ' highlight';
+                
+                html += `<div class="${className}">${val}<br><small>dp[${idx}]=${step.dp[idx]}</small></div>`;
+            });
+            
+            html += `</div>`;
+            
+            if (step.final) {
+                html += `<div class="result-box">
+                    Longest Increasing Subsequence Length: ${Math.max(...step.dp)}<br>
+                    LIS: [${step.lis.join(', ')}]
+                </div>`;
+            }
+            
+            document.getElementById('lisViz').innerHTML = html;
+        }
+
+        function nextLISStep() {
+            if (lisState && lisState.currentStep < lisState.steps.length - 1) {
+                lisState.currentStep++;
+                displayLISStep();
+                
+                if (lisState.currentStep === lisState.steps.length - 1) {
+                    document.getElementById('nextLISBtn').disabled = true;
+                }
+            }
+        }
+
+        function resetLIS() {
+            lisState = null;
+            document.getElementById('nextLISBtn').disabled = true;
+            document.getElementById('lisViz').innerHTML = 
+                `<div class="step-info">Enter an array and click "Find LIS" to see the dynamic programming solution</div>`;
+        }
+
+        // Binary Search Implementation
+        function startBinarySearch() {
+            const arrayInput = document.getElementById('binaryArray').value;
+            const target = parseInt(document.getElementById('target').value);
+            
+            try {
+                const array = arrayInput.split(',').map(x => parseInt(x.trim()));
+                if (array.some(isNaN)) throw new Error("Invalid numbers in array");
+                
+                binaryState = {
+                    array: array,
+                    target: target,
+                    steps: [],
+                    currentStep: 0
+                };
+                
+                generateBinarySearchSteps();
+                displayBinaryStep();
+                
+                document.getElementById('nextBinaryBtn').disabled = false;
+            } catch (error) {
+                document.getElementById('binaryViz').innerHTML = 
+                    `<div class="error-box">Error: ${error.message}</div>`;
+            }
+        }
+
+        function generateBinarySearchSteps() {
+            const state = binaryState;
+            const array = state.array;
+            const target = state.target;
+            let left = 0, right = array.length - 1;
+            
+            state.steps.push({
+                left: left,
+                right: right,
+                mid: -1,
+                message: `Initialize: left=0, right=${right}, target=${target}`
+            });
+            
+            while (left <= right) {
+                const mid = Math.floor((left + right) / 2);
+                
+                state.steps.push({
+                    left: left,
+                    right: right,
+                    mid: mid,
+                    message: `Check middle: array[${mid}] = ${array[mid]}`
+                });
+                
+                if (array[mid] === target) {
+                    state.steps.push({
+                        left: left,
+                        right: right,
+                        mid: mid,
+                        message: `Found! Target ${target} at index ${mid}`,
+                        found: true
+                    });
+                    return;
+                } else if (array[mid] < target) {
+                    left = mid + 1;
+                    state.steps.push({
+                        left: left,
+                        right: right,
+                        mid: -1,
+                        message: `${array[mid]} < ${target}, search right half: left=${left}`
+                    });
+                } else {
+                    right = mid - 1;
+                    state.steps.push({
+                        left: left,
+                        right: right,
+                        mid: -1,
+                        message: `${array[mid]} > ${target}, search left half: right=${right}`
+                    });
+                }
+            }
+            
+            state.steps.push({
+                left: left,
+                right: right,
+                mid: -1,
+                message: `Target ${target} not found in array`,
+                notFound: true
+            });
+        }
+
+        function displayBinaryStep() {
+            const state = binaryState;
+            if (!state || state.currentStep >= state.steps.length) return;
+            
+            const step = state.steps[state.currentStep];
+            
+            let html = `
+                <div class="step-info">
+                    <strong>Step ${state.currentStep + 1}:</strong> ${step.message}
+                </div>
+                <div class="array-container">
+            `;
+            
+            state.array.forEach((val, idx) => {
+                let className = 'array-element';
+                if (idx === step.mid) className += ' pivot';
+                else if (idx >= step.left && idx <= step.right) className += ' highlight';
+                
+                html += `<div class="${className}">${val}<br><small>${idx}</small></div>`;
+            });
+            
+            html += `</div>`;
+            
+            if (step.found) {
+                html += `<div class="result-box">Target found at index ${step.mid}!</div>`;
+            } else if (step.notFound) {
+                html += `<div class
