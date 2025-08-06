@@ -94,153 +94,108 @@ function BFS(capacity, flow, s, t):
                     return parent # Path to sink found
     return None # No path to sink
 ```
-🔢 Example Step-by-Step Simulation
+# 🔢 Example Step-by-Step Simulation
 Let's illustrate the Edmonds-Karp algorithm with a concrete example.
 
-🧩 Example Flow Network
+## 🧩 Example Flow Network
 Consider the following directed graph with given capacities:
 
-Edge Capacities:
+### Edge Capacities:
+| From | To | Capacity |
+|------|----|----------|
+| s    | A  | 10       |
+| s    | B  | 10       |
+| A    | B  | 15       |
+| A    | t  | 5        |
+| B    | t  | 10       |
 
-From	To	Capacity
-s	A	10
-s	B	10
-A	B	15
-A	t	5
-B	t	10
 
-Export to Sheets
 We will track the residual graph, augmenting paths, bottleneck capacities, and updated flow values.
 
-✅ Step-by-Step Simulation of Edmonds-Karp
-🔁 Iteration 1: BFS finds path s
-rightarrowA
-rightarrowt
-Residual capacities:
+## ✅ Step-by-Step Simulation of Edmonds-Karp
 
-s
-rightarrowA=10
+### 🔁 Iteration 1: 
+**BFS finds path** `s → A → t`  
+**Residual capacities:**
+- `s → A = 10`
+- `A → t = 5`
 
-A
-rightarrowt=5
+➡️ **Augmenting path:** `s → A → t`  
+➡️ **Bottleneck:** `min(10,5) = 5`
 
-➡️ Augmenting path: s
-rightarrowA
-rightarrowt
+**Update flows:**
+- `flow[s][A] += 5` → now 5
+- `flow[A][t] += 5` → now 5
 
-➡️ Bottleneck: 
-min(10,5)=5
+**Residual updates:**
+- `s → A` becomes 5
+- `A → t` becomes 0
+- Reverse edges `A → s = 5` and `t → A = 5` are added
 
-Update flows:
+**Total flow so far:** 5
 
-flow[s][A] += 5 
-rightarrow now 5
+---
 
-flow[A][t] += 5 
-rightarrow now 5
+### 🔁 Iteration 2: 
+**BFS finds path** `s → B → t`  
+**Residual capacities:**
+- `s → B = 10`
+- `B → t = 10`
 
-Residual updates:
+➡️ **Augmenting path:** `s → B → t`  
+➡️ **Bottleneck:** `min(10,10) = 10`
 
-s
-rightarrowA becomes 5
+**Update flows:**
+- `flow[s][B] += 10` → now 10
+- `flow[B][t] += 10` → now 10
 
-A
-rightarrowt becomes 0
+**Residual updates:**
+- `s → B` becomes 0
+- `B → t` becomes 0
+- Reverse edges `B → s = 10` and `t → B = 10` are added
 
-Reverse edges A
-rightarrows=5 and t
-rightarrowA=5 are added to the residual graph.
+**Total flow so far:** 5 + 10 = 15
 
-Total flow so far: 5
+---
 
-🔁 Iteration 2: BFS finds path s
-rightarrowB
-rightarrowt
-Residual capacities:
+### 🔁 Iteration 3: 
+**BFS finds path** `s → A → B → t`  
+At this point:
+- Direct paths to `t` from `A` and `B` are blocked (`A → t` and `B → t` have 0 residual capacity)
+- Reverse edges allow more complex paths
 
-s
-rightarrowB=10
+**BFS attempts:**
+1. `s → A` (residual capacity 5)
+2. `A → B` (residual capacity 15)
+3. From `B`, cannot go to `t` directly (residual capacity 0)
 
-B
-rightarrowt=10
+🔒 **No augmenting path** to `t` is possible in this residual graph
 
-➡️ Augmenting path: s
-rightarrowB
-rightarrowt
+---
 
-➡️ Bottleneck: 
-min(10,10)=10
+## ✅ Termination
+No more augmenting paths exist from `s` to `t` in the residual graph. The algorithm terminates.
 
-Update flows:
+## 🔚 Final Flow Values
+| Edge      | Flow |
+|-----------|------|
+| s → A     | 5    |
+| s → B     | 10   |
+| A → t     | 5    |
+| B → t     | 10   |
+| A → B     | 0    |
 
-flow[s][B] += 10 
-rightarrow now 10
 
-flow[B][t] += 10 
-rightarrow now 10
 
-Residual updates:
+💧 **Maximum Flow from s to t:** 5 + 10 = 15
 
-s
-rightarrowB becomes 0
+---
 
-B
-rightarrowt becomes 0
-
-Reverse edges B
-rightarrows=10 and t
-rightarrowB=10 are added to the residual graph.
-
-Total flow so far: 5+10=15
-
-🔁 Iteration 3: BFS finds path s
-rightarrowA
-rightarrowB
-rightarrowt
-At this point, direct paths to t from A and B are blocked in the residual graph (A
-rightarrowt and B
-rightarrowt have 0 residual capacity). However, the presence of reverse edges allows for more complex paths.
-
-BFS attempts to find a path. It can find:
-
-s
-rightarrowA (residual capacity 5)
-
-A
-rightarrowB (residual capacity 15)
-
-From B, it cannot go directly to t as B
-rightarrowt has 0 residual capacity.
-
-🔒 No augmenting path to t is possible from s in this residual graph that includes B
-rightarrowt.
-
-Therefore, in this specific network, after Iteration 2, no more augmenting paths exist from s to t.
-
-✅ Termination
-No more augmenting paths exist from s to t in the residual graph. The algorithm terminates.
-
-🔚 Final Flow Values
-Edge	Flow
-s
-rightarrowA	5
-s
-rightarrowB	10
-A
-rightarrowt	5
-B
-rightarrowt	10
-A
-rightarrowB	0
-
-Export to Sheets
-💧 Maximum Flow from s to t: 5+10=15
-
-🧠 Summary
-Edmonds-Karp uses BFS to ensure that the shortest augmenting paths are found.
-
-This strategy helps to avoid inefficient long detours and guarantees the algorithm's polynomial runtime for integral capacities.
-
-The residual graph is dynamically updated after every flow augmentation, including the addition of reverse edges to allow for flow cancellations, which is crucial for finding the true maximum flow.
-
-The algorithm stops when no more paths from the source to the sink can be found in the residual graph, at which point the maximum flow is achieved.
+## 🧠 Summary
+- Edmonds-Karp uses **BFS** to find shortest augmenting paths
+- Guarantees **polynomial runtime** for integral capacities
+- Residual graph is dynamically updated with:
+  - Forward edge capacity reductions
+  - Reverse edges for flow cancellation
+- Algorithm stops when no more `s-t` paths exist in residual graph
+- Reverse edges enable "flow undo" operations critical for correctness
