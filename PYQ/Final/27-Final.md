@@ -4,25 +4,32 @@
 
 ### Part a) Substitution Method for Recurrence Relation [6 marks]
 
-**Given:** T(n) = 7T(n - 2) + n², verify if T(n) = O(n⁴)
+**Given:** T(n) = 7T(n - 2) + n², verify if T(n) = O(n³)
 
 **Solution:**
-Using the substitution method, we assume T(n) ≤ cn⁴ for some constant c > 0.
+Using the substitution method, we assume T(n) ≤ cn³ for some constant c > 0.
 
 **Substitution:**
 T(n) = 7T(n-2) + n²
-≤ 7c(n-2)⁴ + n²
-= 7c(n⁴ - 8n³ + 24n² - 32n + 16) + n²
-= 7cn⁴ - 56cn³ + 168cn² - 224cn + 112c + n²
-= 7cn⁴ + n²(-56cn + 168c - 224c/n + 112c/n² + 1)
+≤ 7c(n-2)³ + n²
 
-For this to be ≤ cn⁴, we need:
-7c + (terms with lower powers) ≤ c
-This gives us 6c ≤ -(lower order terms)
+Expanding (n-2)³:
+(n-2)³ = n³ - 6n² + 12n - 8
 
-Since the coefficient 6c is positive and dominates for large n, this inequality cannot hold.
+So:
+T(n) ≤ 7c(n³ - 6n² + 12n - 8) + n²
+= 7cn³ - 42cn² + 84cn - 56c + n²
+= 7cn³ + n²(-42c + 1) + 84cn - 56c
 
-**Conclusion:** The assumption T(n) = O(n⁴) is **incorrect**.
+For this to be ≤ cn³, we need:
+7cn³ + (lower order terms) ≤ cn³
+
+This requires: 7c ≤ c, which means 6c ≤ 0.
+Since c > 0, this inequality cannot be satisfied.
+
+**Conclusion:** The assumption T(n) = O(n³) is **incorrect**.
+
+**Alternative verification:** The dominant term 7T(n-2) suggests the solution grows faster than n³, likely around O(n^(log₂ 7)) ≈ O(n^2.81), which is indeed greater than O(n³).
 
 **Relation to the quote:** The substitution method is indeed effective when the assumption is appropriate. Here, it clearly shows our assumption was wrong, demonstrating its diagnostic power.
 
