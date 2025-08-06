@@ -72,9 +72,10 @@ function edmonds_karp(capacity, s, t):
         max_flow += path_flow
 
     return max_flow
+```
 🔎 BFS Function (to find shortest path):
 Python
-
+```
 function BFS(capacity, flow, s, t):
     visited = set()
     queue = [s]
@@ -92,6 +93,7 @@ function BFS(capacity, flow, s, t):
                 if v == t:
                     return parent # Path to sink found
     return None # No path to sink
+```
 🔢 Example Step-by-Step Simulation
 Let's illustrate the Edmonds-Karp algorithm with a concrete example.
 
