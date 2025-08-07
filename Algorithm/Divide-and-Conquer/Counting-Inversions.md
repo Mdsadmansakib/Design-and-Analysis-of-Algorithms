@@ -12,6 +12,26 @@ Inversions: (2,1), (4,1), (4,3)
 Total count = 3
 ```
 
+## Algorithm Steps
+
+### Step 1: Divide
+- Split array into two halves recursively until single elements
+- Use same divide strategy as merge sort
+
+### Step 2: Count Inversions in Three Parts
+1. **Left Half**: Count inversions within left subarray (recursive call)
+2. **Right Half**: Count inversions within right subarray (recursive call)  
+3. **Cross Inversions**: Count inversions between left and right halves (during merge)
+
+### Step 3: Merge & Count Cross Inversions
+- Merge two sorted halves back together
+- **Key Insight**: If `left[i] > right[j]`, then ALL elements from `i` to `mid` in left half form inversions with `right[j]`
+- Count `(mid - i + 1)` inversions at once
+
+### Step 4: Return Total Count
+- Add up: left inversions + right inversions + cross inversions
+- Return the sum to parent call
+
 ## Why Use Merge Sort?
 - **Naive approach**: Check every pair → O(n²) time
 - **Smart approach**: Use divide & conquer with merge sort → O(n log n) time
@@ -140,6 +160,7 @@ When `temp[i] > temp[j]`:
 
 ## Visualize
 ![Visual](https://github.com/Mdsadmansakib/Design-and-Analysis-of-Algorithms/blob/main/Algorithm/Divide-and-Conquer/CI.png) 
+
 
 ## Complexity
 - **Time**: O(n log n) - same as merge sort
