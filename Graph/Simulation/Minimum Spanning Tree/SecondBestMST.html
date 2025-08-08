@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Best MST Step-by-Step Simulation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #1976d2;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+        }
+        
+        .step-section {
+            margin-bottom: 50px;
+            border: 2px solid #e1f5fe;
+            border-radius: 10px;
+            padding: 25px;
+            background: #fafafa;
+        }
+        
+        .step-title {
+            background: linear-gradient(45deg, #1976d2, #42a5f5);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            margin: -25px -25px 20px -25px;
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+        
+        .graph-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .graph-container {
+            text-align: center;
+            margin: 10px;
+        }
+        
+        .graph-label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 1.1em;
+        }
+        
+        canvas {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .weight-info {
+            margin-top: 10px;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: white;
+        }
+        
+        .weight-first { background: #4caf50; }
+        .weight-alternative { background: #ff9800; }
+        .weight-best { background: #e91e63; }
+        
+        .explanation {
+            background: #f0f8ff;
+            border-left: 4px solid #2196f3;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .edge-list {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .final-result {
+            background: linear-gradient(45deg, #e91e63, #f06292);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3em;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌳 Second Best MST Algorithm</h1>
+        <p class="subtitle">Step-by-Step Visual Simulation</p>
+        
+        <!-- Step 0: Original Graph -->
+        <div class="step-section">
+            <div class="step-title">Step 0: Original Graph</div>
+            <div class="explanation">
+                <p><strong>Given Graph:</strong> We start with the weighted undirected graph from the problem.</p>
+                <p><strong>Nodes:</strong> A, B, C, D, E, F, G</p>
+                <p><strong>Edges with weights:</strong> A-D(3), A-B(2), B-C(5), C-E(2), C-F(6), D-E(4), D-G(2), E-F(2), E-G(5), F-G(3), A-G(4)</p>
+            </div>
+            <div class="graph-row">
+                <div class="graph-container">
+                    <div class="graph-label">Original Weighted Graph</div>
+                    <canvas id="originalGraph" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1: Find First MST -->
+        <div class="step-section">
+            <div class="step-title">Step 1: Find First MST using Kruskal's Algorithm</div>
+            <div class="explanation">
+                <p><strong>Algorithm:</strong> Sort edges by weight and add them if they don't create a cycle.</p>
+                <p><strong>Edge selection order:</strong> A-B(2), C-E(2), D-G(2), E-F(2), A-D(3), F-G(3)</p>
+            </div>
+            <div class="graph-row">
+                <div class="graph-container">
+                    <div class="graph-label">First MST (Kruskal's Algorithm)</div>
+                    <canvas id="firstMST" width="400" height="300"></canvas>
+                    <div class="weight-info weight-first">Total Weight: 13</div>
+                    <div class="edge-list">
+                        MST Edges:<br>
+                        A-B (2)<br>
+                        C-E (2)<br>
+                        D-G (2)<br>
+                        E-F (2)<br>
+                        A-D (3)<br>
+                        F-G (3)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Algorithm for Second Best -->
+        <div class="step-section">
+            <div class="step-title">Step 2: Second Best MST Algorithm</div>
+            <div class="explanation">
+                <p><strong>Strategy:</strong> For each edge in the first MST, remove it and find the MST of the remaining graph.</p>
+                <p><strong>The minimum weight among all these alternative MSTs is the second best MST.</strong></p>
+            </div>
+        </div>
+
+        <!-- Step 3: Try removing each edge -->
+        <div class="step-section">
+            <div class="step-title">Step 3: Testing Each Alternative (Remove one MST edge at a time)</div>
+            
+            <div class="graph-row">
+                <div class="graph-container">
+                    <div class="graph-label">Remove A-B (weight 2)</div>
+                    <canvas id="remove1" width="300" height="220"></canvas>
+                    <div class="weight-info weight-alternative">New MST Weight: 16</div>
+                </div>
+                <div class="graph-container">
+                    <div class="graph-label">Remove C-E (weight 2)</div>
+                    <canvas id="remove2" width="300" height="220"></canvas>
+                    <div class="weight-info weight-alternative">New MST Weight: 17</div>
+                </div>
+                <div class="graph-container">
+                    <div class="graph-label">Remove D-G (weight 2)</div>
+                    <canvas id="remove3" width="300" height="220"></canvas>
+                    <div class="weight-info weight-alternative">New MST Weight: 15</div>
+                </div>
+            </div>
+            
+            <div class="graph-row">
+                <div class="graph-container">
+                    <div class="graph-label">Remove E-F (weight 2)</div>
+                    <canvas id="remove4" width="300" height="220"></canvas>
+                    <div class="weight-info weight-alternative">New MST Weight: 17</div>
+                </div>
+                <div class="graph-container">
+                    <div class="graph-label">Remove A-D (weight 3)</div>
+                    <canvas id="remove5" width="300" height="220"></canvas>
+                    <div class="weight-info weight-alternative">New MST Weight: 14</div>
+                </div>
+                <div class="graph-container">
+                    <div class="graph-label">Remove F-G (weight 3)</div>
+                    <canvas id="remove6" width="300" height="220"></canvas>
+                    <div class="weight-info weight-alternative">New MST Weight: 15</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Find the minimum -->
+        <div class="step-section">
+            <div class="step-title">Step 4: Identify Second Best MST</div>
+            <div class="highlight">
+                <p><strong>Alternative MST weights:</strong></p>
+                <ul>
+                    <li>Without A-B: 16</li>
+                    <li>Without C-E: 17</li>
+                    <li>Without D-G: 15</li>
+                    <li>Without E-F: 17</li>
+                    <li>Without A-D: <strong>14</strong> ← Minimum!</li>
+                    <li>Without F-G: 15</li>
+                </ul>
+            </div>
+            
+            <div class="graph-row">
+                <div class="graph-container">
+                    <div class="graph-label">Second Best MST (Remove A-D from first MST)</div>
+                    <canvas id="secondBestMST" width="450" height="320"></canvas>
+                    <div class="weight-info weight-best">Weight: 14 (Difference: +1)</div>
+                    <div class="edge-list">
+                        Second Best MST Edges:<br>
+                        A-B (2)<br>
+                        C-E (2)<br>
+                        D-G (2)<br>
+                        E-F (2)<br>
+                        F-G (3)<br>
+                        A-G (4) ← Replacement edge
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="final-result">
+            <h2>🎯 Final Answer</h2>
+            <p><strong>First MST Weight:</strong> 13</p>
+            <p><strong>Second Best MST Weight:</strong> 14</p>
+            <p><strong>The second best MST is obtained by replacing edge A-D(3) with A-G(4)</strong></p>
+        </div>
+    </div>
+
+    <script>
+        // Graph data
+        const nodes = {
+            'A': {x: 80, y: 60},
+            'B': {x: 80, y: 160},
+            'C': {x: 180, y: 160},
+            'D': {x: 180, y: 60},
+            'E': {x: 260, y: 110},
+            'F': {x: 320, y: 160},
+            'G': {x: 320, y: 60}
+        };
+        
+        const edges = [
+            {from: 'A', to: 'D', weight: 3},
+            {from: 'A', to: 'B', weight: 2},
+            {from: 'B', to: 'C', weight: 5},
+            {from: 'C', to: 'E', weight: 2},
+            {from: 'C', to: 'F', weight: 6},
+            {from: 'D', to: 'E', weight: 4},
+            {from: 'D', to: 'G', weight: 2},
+            {from: 'E', to: 'F', weight: 2},
+            {from: 'E', to: 'G', weight: 5},
+            {from: 'F', to: 'G', weight: 3},
+            {from: 'A', to: 'G', weight: 4}
+        ];
+
+        const firstMSTEdges = [
+            {from: 'A', to: 'B', weight: 2},
+            {from: 'C', to: 'E', weight: 2},
+            {from: 'D', to: 'G', weight: 2},
+            {from: 'E', to: 'F', weight: 2},
+            {from: 'A', to: 'D', weight: 3},
+            {from: 'F', to: 'G', weight: 3}
+        ];
+
+        // Alternative MSTs when removing each edge
+        const alternatives = {
+            'A-B': [{from: 'C', to: 'E', weight: 2}, {from: 'D', to: 'G', weight: 2}, {from: 'E', to: 'F', weight: 2}, {from: 'A', to: 'D', weight: 3}, {from: 'F', to: 'G', weight: 3}, {from: 'A', to: 'G', weight: 4}],
+            'C-E': [{from: 'A', to: 'B', weight: 2}, {from: 'D', to: 'G', weight: 2}, {from: 'E', to: 'F', weight: 2}, {from: 'A', to: 'D', weight: 3}, {from: 'F', to: 'G', weight: 3}, {from: 'B', to: 'C', weight: 5}],
+            'D-G': [{from: 'A', to: 'B', weight: 2}, {from: 'C', to: 'E', weight: 2}, {from: 'E', to: 'F', weight: 2}, {from: 'A', to: 'D', weight: 3}, {from: 'F', to: 'G', weight: 3}, {from: 'A', to: 'G', weight: 4}],
+            'E-F': [{from: 'A', to: 'B', weight: 2}, {from: 'C', to: 'E', weight: 2}, {from: 'D', to: 'G', weight: 2}, {from: 'A', to: 'D', weight: 3}, {from: 'F', to: 'G', weight: 3}, {from: 'C', to: 'F', weight: 6}],
+            'A-D': [{from: 'A', to: 'B', weight: 2}, {from: 'C', to: 'E', weight: 2}, {from: 'D', to: 'G', weight: 2}, {from: 'E', to: 'F', weight: 2}, {from: 'F', to: 'G', weight: 3}, {from: 'A', to: 'G', weight: 4}],
+            'F-G': [{from: 'A', to: 'B', weight: 2}, {from: 'C', to: 'E', weight: 2}, {from: 'D', to: 'G', weight: 2}, {from: 'E', to: 'F', weight: 2}, {from: 'A', to: 'D', weight: 3}, {from: 'E', to: 'G', weight: 5}]
+        };
+
+        function drawGraph(canvasId, highlightEdges = [], scale = 1) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Scale nodes for smaller canvases
+            const scaledNodes = {};
+            for (let [name, pos] of Object.entries(nodes)) {
+                scaledNodes[name] = {x: pos.x * scale, y: pos.y * scale};
+            }
+            
+            // Draw all edges in light gray first
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = '#ddd';
+            for (let edge of edges) {
+                const fromPos = scaledNodes[edge.from];
+                const toPos = scaledNodes[edge.to];
+                
+                ctx.beginPath();
+                ctx.moveTo(fromPos.x, fromPos.y);
+                ctx.lineTo(toPos.x, toPos.y);
+                ctx.stroke();
+            }
+            
+            // Draw highlighted edges
+            ctx.lineWidth = 3;
+            for (let edge of highlightEdges) {
+                ctx.strokeStyle = '#e91e63';
+                
+                const fromPos = scaledNodes[edge.from];
+                const toPos = scaledNodes[edge.to];
+                
+                ctx.beginPath();
+                ctx.moveTo(fromPos.x, fromPos.y);
+                ctx.lineTo(toPos.x, toPos.y);
+                ctx.stroke();
+                
+                // Draw weight
+                const midX = (fromPos.x + toPos.x) / 2;
+                const midY = (fromPos.y + toPos.y) / 2;
+                
+                ctx.fillStyle = '#e91e63';
+                ctx.font = `bold ${12 * scale}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.fillText(edge.weight.toString(), midX, midY - 3);
+            }
+            
+            // Draw nodes
+            for (let [name, pos] of Object.entries(scaledNodes)) {
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, 15 * scale, 0, 2 * Math.PI);
+                ctx.fillStyle = '#2196f3';
+                ctx.fill();
+                ctx.strokeStyle = '#1976d2';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                ctx.fillStyle = 'white';
+                ctx.font = `bold ${12 * scale}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.fillText(name, pos.x, pos.y + 4 * scale);
+            }
+        }
+
+        // Draw all graphs
+        window.onload = function() {
+            // Original graph
+            drawGraph('originalGraph', []);
+            
+            // First MST
+            drawGraph('firstMST', firstMSTEdges);
+            
+            // Alternatives (smaller scale)
+            drawGraph('remove1', alternatives['A-B'], 0.75);
+            drawGraph('remove2', alternatives['C-E'], 0.75);
+            drawGraph('remove3', alternatives['D-G'], 0.75);
+            drawGraph('remove4', alternatives['E-F'], 0.75);
+            drawGraph('remove5', alternatives['A-D'], 0.75);
+            drawGraph('remove6', alternatives['F-G'], 0.75);
+            
+            // Second best MST (larger)
+            drawGraph('secondBestMST', alternatives['A-D'], 1.1);
+        };
+    </script>
+</body>
+</html>
