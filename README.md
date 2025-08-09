@@ -72,19 +72,6 @@ This repository contains comprehensive implementations, explanations, and proble
 * Minimum Path Cover
 * Edge Cover
 
-## 📂 Repository Structure
-
-```
-├── complexity_analysis/
-├── graph_traversal/
-├── shortest_path/
-├── divide_and_conquer/
-├── greedy_algorithms/
-├── dynamic_programming/
-├── network_flow/
-└── README.md
-```
-
 
 
 ## Goal
