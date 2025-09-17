@@ -74,9 +74,7 @@ This repository contains comprehensive implementations, explanations, and proble
 
 
 
-## Goal
 
-This repository is designed for **students, competitive programmers, and interview candidates** to strengthen their problem-solving skills in algorithms.
 
 ---
 
